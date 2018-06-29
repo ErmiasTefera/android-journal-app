@@ -1,8 +1,9 @@
-package com.example.ermia.journalapp;
+package com.example.ermia.journalapp.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,7 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.ermia.journalapp.R;
+import com.example.ermia.journalapp.ui.fragment.HomeFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -27,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout mDrawer;
     ActionBarDrawerToggle mActionBarDrawerToggle;
     Toolbar mToolbar;
+    GoogleSignInAccount mAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +52,35 @@ public class MainActivity extends AppCompatActivity {
 
         mFragmentManager = getSupportFragmentManager();
 
+        mAccount = GoogleSignIn.getLastSignedInAccount(this);
+
         //loads appropriate view
         setUpView();
+
+    }
+
+    private void setUpNavigationView() {
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+
+        ImageView ivUserPicture = headerView.findViewById(R.id.iv_user_picture);
+        TextView tvUserName = headerView.findViewById(R.id.tv_user_name);
+        TextView tvUserEmail = headerView.findViewById(R.id.tv_user_email);
+
+        assert mAccount != null;
+        ivUserPicture.setImageURI(mAccount.getPhotoUrl());
+        tvUserName.setText(mAccount.getDisplayName());
+        tvUserEmail.setText(mAccount.getEmail());
+
 
     }
 
     private void setUpView() {
         //load home fragment
         if (isUserLoggedIn()) {
+
+            setUpNavigationView();
+
             Fragment fragment = new HomeFragment();
             replaceFragment(fragment);
         } else  {
@@ -60,16 +88,43 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void replaceFragment(Fragment fragment){
-        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.commit();
-    }
-
     private void showLogin(){
         finish();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+    }
+
+    private boolean isUserLoggedIn(){
+        // Check for existing Google Sign In account, if the user is already signed in
+        // the GoogleSignInAccount will be non-null.
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        return account != null;
+    }
+
+    //sign out
+    private void signOut() {
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        // Build a GoogleSignInClient with the options specified by gso.
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        showLogin();
+                    }
+                });
+    }
+
+    public void replaceFragment(Fragment fragment){
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -106,30 +161,5 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean isUserLoggedIn(){
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        return account != null;
-    }
 
-    //sign out
-    private void signOut() {
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        // Build a GoogleSignInClient with the options specified by gso.
-        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        mGoogleSignInClient.signOut()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        showLogin();
-                    }
-                });
-    }
 }

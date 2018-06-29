@@ -1,13 +1,20 @@
 <resources>
     <string name="app_name">JournalApp</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Journal App</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_sign_out">Sign Out</string>
+    <string name="title_activity_login">Login</string>
+    <string name="action_settings">Settings</string>
+    <string name="journal_title">Title</string>
+    <string name="journal_date">Feb 16</string>
+    <string name="hint_journal_title">Title</string>
+    <string name="hint_journal_content">Say Something</string>
+    <string name="title_activity_add_journal">New Journal</string>
+    <string name="action_save_journal">Save</string>
 </resources>

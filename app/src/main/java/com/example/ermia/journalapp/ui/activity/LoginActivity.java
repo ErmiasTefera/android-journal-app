@@ -1,10 +1,12 @@
-package com.example.ermia.journalapp;
+package com.example.ermia.journalapp.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.example.ermia.journalapp.R;
+import com.example.ermia.journalapp.Utils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;

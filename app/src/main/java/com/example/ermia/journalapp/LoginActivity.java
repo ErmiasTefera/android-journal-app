@@ -1,12 +1,9 @@
 package com.example.ermia.journalapp;
 
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -17,29 +14,21 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-
-public class LoginFragment extends Fragment {
+public class LoginActivity extends AppCompatActivity {
 
     private static final int SIGNED_IN = 0;
     private static final int STATE_SIGNING_IN = 1;
     private static final int STATE_IN_PROGRESS = 2;
     private static final int RC_SIGN_IN = 0;
 
-    private MainActivity mMainActivity;
-
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton mSignInButton;
 
-    public LoginFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
-        mMainActivity = (MainActivity)getActivity();
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -48,16 +37,9 @@ public class LoginFragment extends Fragment {
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleSignInClient = GoogleSignIn.getClient(this.getActivity(), gso);
-    }
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_login, container, false);
-
-        mSignInButton = rootView.findViewById(R.id.sign_in_button);
+        mSignInButton = findViewById(R.id.sign_in_button);
 
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,10 +47,7 @@ public class LoginFragment extends Fragment {
                 signIn();
             }
         });
-
-        return rootView;
     }
-
 
     //sign in
     private void signIn() {
@@ -94,7 +73,7 @@ public class LoginFragment extends Fragment {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             // Signed in successfully, show authenticated UI.
             if (account != null){
-                mMainActivity.onPostSignIn();
+                goToMainActivity();
             }
 
         } catch (ApiException e) {
@@ -105,6 +84,9 @@ public class LoginFragment extends Fragment {
         }
     }
 
-
-
+    private void goToMainActivity(){
+        finish();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
 }

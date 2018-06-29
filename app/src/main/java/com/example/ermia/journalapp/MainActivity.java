@@ -1,5 +1,6 @@
 package com.example.ermia.journalapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment = new HomeFragment();
             replaceFragment(fragment);
         } else  {
-            signIn();
+            showLogin();
         }
     }
 
@@ -66,36 +66,10 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    private void signIn(){
-        mActionBarDrawerToggle.setDrawerIndicatorEnabled(false);
-        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        replaceFragment(new LoginFragment());
-    }
-
-    public void onPostSignIn(){
-        //refresh menu items
-        invalidateOptionsMenu();
-
-        //unlock drawer swipe feature
-        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        mActionBarDrawerToggle.setDrawerIndicatorEnabled(true);
-
-        HomeFragment fragment = new HomeFragment();
-        replaceFragment(fragment);
-
-    }
-
-    public void onSignOut(){
-
-        //lock drawer
-        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        mActionBarDrawerToggle.setDrawerIndicatorEnabled(false);
-
-        //refresh menu items
-        invalidateOptionsMenu();
-
-        LoginFragment fragment = new LoginFragment();
-        replaceFragment(fragment);
+    private void showLogin(){
+        finish();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -111,14 +85,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-
-        for (int i = 0; i < menu.size(); i++) {
-            if (menu.getItem(i).getItemId() == R.id.action_sign_out) {
-                menu.getItem(i).setVisible(isUserLoggedIn());
-            }
-        }
+        getMenuInflater().inflate(R.menu.main, menu);
 
         return true;
     }
@@ -161,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        onSignOut();
+                        showLogin();
                     }
                 });
     }

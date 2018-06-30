@@ -12,9 +12,12 @@ import android.widget.EditText;
 
 import com.example.ermia.journalapp.R;
 import com.example.ermia.journalapp.Utils;
+import com.example.ermia.journalapp.data.Journal;
+import com.example.ermia.journalapp.ui.fragment.HomeFragment;
 
-public class NewJournalActivity extends AppCompatActivity {
+public class EditJournalActivity extends AppCompatActivity {
 
+    public static final String EXTRA_REPLY_ID = "ID";
     public static final String EXTRA_REPLY_TITLE = "TITLE";
     public static final String EXTRA_REPLY_CONTENT = "CONTENT";
 
@@ -25,13 +28,14 @@ public class NewJournalActivity extends AppCompatActivity {
 
     Intent mReplyIntent;
 
+    Journal mJournal;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_journal);
+        setContentView(R.layout.activity_edit_journal);
 
-        mToolBar = findViewById(R.id.toolbar_new_journal);
-        mToolBar.setTitle("");
+        mToolBar = findViewById(R.id.toolbar_journal_edit);
 
         setSupportActionBar(mToolBar);
 
@@ -43,17 +47,31 @@ public class NewJournalActivity extends AppCompatActivity {
             }
         });
 
-        mJournalTitleView = findViewById(R.id.et_new_journal_title);
-        mJournalContentView = findViewById(R.id.et_new_journal_content);
-
-
         mReplyIntent = new Intent();
+
+        mJournalTitleView = findViewById(R.id.et_journal_detail_title);
+        mJournalContentView = findViewById(R.id.et_journal_detail_content);
+
+
+        Intent intent = getIntent();
+        int journalId = intent.getIntExtra(HomeFragment.INTENT_EXTRA_JOURNAL_ID, 0);
+        String title = intent.getStringExtra(HomeFragment.INTENT_EXTRA_JOURNAL_TITLE);
+        String content = intent.getStringExtra(HomeFragment.INTENT_EXTRA_JOURNAL_CONTENT);
+
+        mJournal = new Journal();
+        mJournal.setId(journalId);
+        mJournal.setTitle(title);
+        mJournal.setContent(content);
+
+        mJournalTitleView.setText(title);
+        mJournalContentView.setText(content);
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.add_new_journal_menu, menu);
+        getMenuInflater().inflate(R.menu.update_journal_menu, menu);
 
         return true;
     }
@@ -62,15 +80,15 @@ public class NewJournalActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_save_journal) {
-            addJournal();
+        if (id == R.id.action_update_journal) {
+            updateJournal();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void addJournal() {
+    private void updateJournal() {
 
         if (TextUtils.isEmpty(mJournalTitleView.getText())) {
             Utils.showMessage(mJournalContentView, "Please enter title");
@@ -78,8 +96,10 @@ public class NewJournalActivity extends AppCompatActivity {
             String title = mJournalTitleView.getText().toString();
             String content = mJournalContentView.getText().toString();
 
+            mReplyIntent.putExtra(EXTRA_REPLY_ID, mJournal.getId());
             mReplyIntent.putExtra(EXTRA_REPLY_TITLE, title);
             mReplyIntent.putExtra(EXTRA_REPLY_CONTENT, content);
+
             setResult(RESULT_OK, mReplyIntent);
             finish();
         }

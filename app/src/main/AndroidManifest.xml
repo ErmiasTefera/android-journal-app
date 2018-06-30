@@ -20,21 +20,40 @@
             </intent-filter>
         </activity>
 
-        <!--Login-->
+        <!-- Login -->
         <activity
             android:name=".ui.activity.LoginActivity"
             android:label="@string/title_activity_login" />
 
-        <!--New Journal-->
+        <!-- New Journal -->
         <activity
             android:name=".ui.activity.NewJournalActivity"
             android:label="@string/title_activity_add_journal"
             android:theme="@style/AppTheme.NoActionBar">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".ui.activity.MainActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activity.MainActivity" />
         </activity>
 
+        <!-- Journal Detail -->
+        <activity
+            android:name=".ui.activity.JournalDetailActivity"
+            android:label="@string/title_activity_journal_detail"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activity.MainActivity" />
+        </activity>
+
+        <!--Edit Journal-->
+        <activity
+            android:name=".ui.activity.EditJournalActivity"
+            android:label="@string/title_activity_journal_edit"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activity.JournalDetailActivity" />
+        </activity>
     </application>
 
 </manifest>

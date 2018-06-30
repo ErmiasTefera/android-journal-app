@@ -17,4 +17,8 @@
     <string name="hint_journal_content">Say Something</string>
     <string name="title_activity_add_journal">New Journal</string>
     <string name="action_save_journal">Save</string>
+    <string name="action_update_journal">Update</string>
+    <string name="title_activity_journal_detail">Detail</string>
+    <string name="title_activity_journal_edit">Edit</string>
+    <string name="action_edit_journal">Edit</string>
 </resources>

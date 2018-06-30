@@ -25,6 +25,11 @@ public class JournalRepository {
         new insertAsyncTask(mJournalDao).execute(journal);
     }
 
+    public void update(Journal journal) {
+        new updateAsyncTask(mJournalDao).execute(journal);
+    }
+
+    //adds new journal
     private static class insertAsyncTask extends AsyncTask<Journal, Void, Void> {
 
         private JournalDao mAsyncTaskDao;
@@ -36,6 +41,22 @@ public class JournalRepository {
         @Override
         protected Void doInBackground(final Journal... params) {
             mAsyncTaskDao.insert(params[0]);
+            return null;
+        }
+    }
+
+    //updates existing journal
+    private static class updateAsyncTask extends AsyncTask<Journal, Void, Void> {
+
+        private JournalDao mAsyncTaskDao;
+
+        updateAsyncTask(JournalDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Journal... params) {
+            mAsyncTaskDao.update(params[0]);
             return null;
         }
     }

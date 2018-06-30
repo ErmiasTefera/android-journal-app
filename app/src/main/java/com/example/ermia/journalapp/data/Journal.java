@@ -41,6 +41,10 @@ public class Journal {
         return this.date;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setTitle(@NonNull String title) {
         this.title = title;
     }

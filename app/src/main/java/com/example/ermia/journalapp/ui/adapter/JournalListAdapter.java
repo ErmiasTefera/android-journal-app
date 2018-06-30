@@ -16,7 +16,7 @@ import java.util.List;
 public class JournalListAdapter extends RecyclerView.Adapter<JournalListAdapter.JournalViewHolder> {
 
     private final LayoutInflater mInflater;
-    private List<Journal> mJournals; // Cached copy of journals
+    public List<Journal> mJournals; // Cached copy of journals
 
     public JournalListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -25,6 +25,7 @@ public class JournalListAdapter extends RecyclerView.Adapter<JournalListAdapter.
     @Override
     public JournalViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = mInflater.inflate(R.layout.item_journal, parent, false);
+
         return new JournalViewHolder(itemView);
     }
 
@@ -33,6 +34,7 @@ public class JournalListAdapter extends RecyclerView.Adapter<JournalListAdapter.
         Journal current = mJournals.get(position);
         holder.tvJournalTitle.setText(current.getTitle());
         holder.tvJournalDate.setText(Utils.getFormattedDateString(current.getDate()));
+
     }
 
     public void setJournals(List<Journal> journals) {

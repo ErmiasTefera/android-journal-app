@@ -25,7 +25,13 @@ public class JournalViewModel extends AndroidViewModel {
         return mAllJournals;
     }
 
+    //adds new journal
     public void insert(Journal journal) {
         mRepository.insert(journal);
+    }
+
+    //update existing journal
+    public void update(Journal journal) {
+        mRepository.update(journal);
     }
 }

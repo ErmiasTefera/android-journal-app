@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.MalformedJsonException;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.example.ermia.journalapp.ui.fragment.HomeFragment;
 public class EditJournalActivity extends AppCompatActivity {
 
     public static final String EXTRA_REPLY_ID = "ID";
+    public static final String EXTRA_REPLY_UUID = "UUID";
     public static final String EXTRA_REPLY_TITLE = "TITLE";
     public static final String EXTRA_REPLY_CONTENT = "CONTENT";
 
@@ -54,12 +56,14 @@ public class EditJournalActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        int journalId = intent.getIntExtra(HomeFragment.INTENT_EXTRA_JOURNAL_ID, 0);
+        long journalId = intent.getLongExtra(HomeFragment.INTENT_EXTRA_JOURNAL_ID,0);
+        String journalUuid = intent.getStringExtra(HomeFragment.INTENT_EXTRA_JOURNAL_UUID);
         String title = intent.getStringExtra(HomeFragment.INTENT_EXTRA_JOURNAL_TITLE);
         String content = intent.getStringExtra(HomeFragment.INTENT_EXTRA_JOURNAL_CONTENT);
 
         mJournal = new Journal();
         mJournal.setId(journalId);
+        mJournal.setUuid(journalUuid);
         mJournal.setTitle(title);
         mJournal.setContent(content);
 
@@ -96,7 +100,9 @@ public class EditJournalActivity extends AppCompatActivity {
             String title = mJournalTitleView.getText().toString();
             String content = mJournalContentView.getText().toString();
 
+
             mReplyIntent.putExtra(EXTRA_REPLY_ID, mJournal.getId());
+            mReplyIntent.putExtra(EXTRA_REPLY_UUID, mJournal.getUuid());
             mReplyIntent.putExtra(EXTRA_REPLY_TITLE, title);
             mReplyIntent.putExtra(EXTRA_REPLY_CONTENT, content);
 

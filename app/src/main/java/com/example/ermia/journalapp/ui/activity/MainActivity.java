@@ -26,6 +26,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     ActionBarDrawerToggle mActionBarDrawerToggle;
     Toolbar mToolbar;
     GoogleSignInAccount mAccount;
+
+    private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +59,19 @@ public class MainActivity extends AppCompatActivity {
 
         mAccount = GoogleSignIn.getLastSignedInAccount(this);
 
+        mAuth = FirebaseAuth.getInstance();
+
         //loads appropriate view
         setUpView();
 
     }
 
     private void setUpNavigationView() {
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
 
@@ -67,11 +79,10 @@ public class MainActivity extends AppCompatActivity {
         TextView tvUserName = headerView.findViewById(R.id.tv_user_name);
         TextView tvUserEmail = headerView.findViewById(R.id.tv_user_email);
 
-        assert mAccount != null;
-        ivUserPicture.setImageURI(mAccount.getPhotoUrl());
-        tvUserName.setText(mAccount.getDisplayName());
-        tvUserEmail.setText(mAccount.getEmail());
-
+        assert currentUser != null;
+        ivUserPicture.setImageURI(currentUser.getPhotoUrl());
+        tvUserName.setText(currentUser.getDisplayName());
+        tvUserEmail.setText(currentUser.getEmail());
 
     }
 
@@ -119,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
                         showLogin();
                     }
                 });
+
+        FirebaseAuth.getInstance().signOut();
     }
 
     public void replaceFragment(Fragment fragment){

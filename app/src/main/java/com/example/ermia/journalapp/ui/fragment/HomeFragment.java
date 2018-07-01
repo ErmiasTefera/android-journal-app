@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.ermia.journalapp.R;
 import com.example.ermia.journalapp.Utils;
 import com.example.ermia.journalapp.data.Journal;
+import com.example.ermia.journalapp.data.JournalRepository;
 import com.example.ermia.journalapp.ui.ClickListener;
 import com.example.ermia.journalapp.ui.JournalViewModel;
 import com.example.ermia.journalapp.ui.RecyclerTouchListener;
@@ -40,9 +41,11 @@ public class HomeFragment extends Fragment {
     public static final String INTENT_EXTRA_JOURNAL_ID = "JOURNAL ID";
     public static final String INTENT_EXTRA_JOURNAL_TITLE = "JOURNAL TITLE";
     public static final String INTENT_EXTRA_JOURNAL_CONTENT = "JOURNAL CONTENT";
+    public static final String INTENT_EXTRA_JOURNAL_UUID = "JOURNAL UUID";
 
 
     View mRootView;
+
 
     private JournalListAdapter mAdapter;
     private JournalViewModel mJournalViewModel;
@@ -62,6 +65,7 @@ public class HomeFragment extends Fragment {
             public void onChanged(@Nullable final List<Journal> journals) {
                 // Update the cached copy of the journals in the adapter.
                 mAdapter.setJournals(journals);
+                synchronizeData();
             }
         });
     }
@@ -122,6 +126,7 @@ public class HomeFragment extends Fragment {
     private void showDetailActivity(Journal journal) {
         Intent intent = new Intent(getActivity(), JournalDetailActivity.class);
         intent.putExtra(INTENT_EXTRA_JOURNAL_ID, journal.getId());
+        intent.putExtra(INTENT_EXTRA_JOURNAL_UUID,journal.getUuid());
         intent.putExtra(INTENT_EXTRA_JOURNAL_TITLE, journal.getTitle());
         intent.putExtra(INTENT_EXTRA_JOURNAL_CONTENT, journal.getContent());
 
@@ -145,6 +150,7 @@ public class HomeFragment extends Fragment {
 
         Journal journal = new Journal();
 
+        journal.setUuid(Utils.uuid());
         journal.setTitle(journalTitle);
         journal.setContent(journalContent);
         journal.setDate(Utils.getCurrentDateAsString());
@@ -155,13 +161,15 @@ public class HomeFragment extends Fragment {
     }
 
     private void updateJournal(Intent data) {
-        int journalId = data.getIntExtra(JournalDetailActivity.EXTRA_REPLY_ID, 0);
+        long journalId = data.getLongExtra(JournalDetailActivity.EXTRA_REPLY_ID,0);
+        String journalUuid = data.getStringExtra(JournalDetailActivity.EXTRA_REPLY_UUID);
         String journalTitle = data.getStringExtra(JournalDetailActivity.EXTRA_REPLY_TITLE);
         String journalContent = data.getStringExtra(JournalDetailActivity.EXTRA_REPLY_CONTENT);
 
         Journal journal = new Journal();
 
         journal.setId(journalId);
+        journal.setUuid(journalUuid);
         journal.setTitle(journalTitle);
         journal.setContent(journalContent);
         journal.setDate(Utils.getCurrentDateAsString());
@@ -170,4 +178,12 @@ public class HomeFragment extends Fragment {
 
         Utils.showMessage(mRootView, "Journal Updated");
     }
+
+    //synchronizes data between local and live data
+    void synchronizeData(){
+        JournalRepository repository = new JournalRepository(getActivity().getApplication());
+        repository.synchronizeData();
+    }
+
+
 }

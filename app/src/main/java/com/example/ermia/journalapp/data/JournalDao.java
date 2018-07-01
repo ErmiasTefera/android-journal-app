@@ -11,7 +11,7 @@ import java.util.List;
 @Dao
 public interface JournalDao {
     @Insert
-    void insert(Journal journal);
+    long insert(Journal journal);
 
     @Update
     int update(Journal journal);
@@ -21,4 +21,7 @@ public interface JournalDao {
 
     @Query("SELECT * from journal")
     LiveData<List<Journal>> getAllJournals();
+
+    @Query("SELECT * FROM journal WHERE uuid = :uuid")
+    Journal getJournalByUuid(String uuid);
 }

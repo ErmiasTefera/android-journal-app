@@ -23,8 +23,6 @@ public abstract class JournalRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             JournalRoomDatabase.class, "journal_database")
-                            //TODO Remove .addCallback(sRoomDatabaseCallback)
-                            .addCallback(sRoomDatabaseCallback)
                             .build();
 
                 }
@@ -56,12 +54,14 @@ public abstract class JournalRoomDatabase extends RoomDatabase {
             mDao.deleteAll();
 
             Journal journal = new Journal();
+            journal.setUuid(Utils.uuid());
             journal.setTitle("Title 1");
             journal.setContent("Journal content goes here...");
             journal.setDate(Utils.getCurrentDateAsString());
             mDao.insert(journal);
 
             journal = new Journal();
+            journal.setUuid(Utils.uuid());
             journal.setTitle("Title 2");
             journal.setContent("" +
                     "A material metaphor is the unifying theory of a rationalized space and a system of motion." +

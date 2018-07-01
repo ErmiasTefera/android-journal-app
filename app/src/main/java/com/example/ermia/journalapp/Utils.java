@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 public class Utils {
 
@@ -25,5 +26,9 @@ public class Utils {
         DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy", Locale.ENGLISH);
         Date date = new Date(stringDate);
         return dateFormat.format(date);
+    }
+
+    public static String uuid() {
+        return UUID.randomUUID().toString();
     }
 }

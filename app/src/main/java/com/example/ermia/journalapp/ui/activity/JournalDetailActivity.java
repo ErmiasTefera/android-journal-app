@@ -17,6 +17,7 @@ import com.example.ermia.journalapp.ui.fragment.HomeFragment;
 public class JournalDetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_REPLY_ID = "ID";
+    public static final String EXTRA_REPLY_UUID = "UUID";
     public static final String EXTRA_REPLY_TITLE = "TITLE";
     public static final String EXTRA_REPLY_CONTENT = "CONTENT";
 
@@ -55,12 +56,14 @@ public class JournalDetailActivity extends AppCompatActivity {
         mReplyIntent = new Intent();
 
         Intent intent = getIntent();
-        int journalId = intent.getIntExtra(HomeFragment.INTENT_EXTRA_JOURNAL_ID, 0);
+        long journalId = intent.getLongExtra(HomeFragment.INTENT_EXTRA_JOURNAL_ID,0);
+        String uuid = intent.getStringExtra(HomeFragment.INTENT_EXTRA_JOURNAL_UUID);
         String title = intent.getStringExtra(HomeFragment.INTENT_EXTRA_JOURNAL_TITLE);
         String content = intent.getStringExtra(HomeFragment.INTENT_EXTRA_JOURNAL_CONTENT);
 
         mJournal = new Journal();
         mJournal.setId(journalId);
+        mJournal.setUuid(uuid);
         mJournal.setTitle(title);
         mJournal.setContent(content);
 
@@ -73,6 +76,7 @@ public class JournalDetailActivity extends AppCompatActivity {
     private void showEditActivity() {
         Intent intent = new Intent(this, EditJournalActivity.class);
         intent.putExtra(HomeFragment.INTENT_EXTRA_JOURNAL_ID, mJournal.getId());
+        intent.putExtra(HomeFragment.INTENT_EXTRA_JOURNAL_UUID, mJournal.getUuid());
         intent.putExtra(HomeFragment.INTENT_EXTRA_JOURNAL_TITLE, mJournal.getTitle());
         intent.putExtra(HomeFragment.INTENT_EXTRA_JOURNAL_CONTENT, mJournal.getContent());
 
@@ -116,13 +120,12 @@ public class JournalDetailActivity extends AppCompatActivity {
         String content = data.getStringExtra(EXTRA_REPLY_CONTENT);
 
         mReplyIntent.putExtra(EXTRA_REPLY_ID, mJournal.getId());
+        mReplyIntent.putExtra(EXTRA_REPLY_UUID, mJournal.getUuid());
         mReplyIntent.putExtra(EXTRA_REPLY_TITLE, title);
         mReplyIntent.putExtra(EXTRA_REPLY_CONTENT, content);
 
         setResult(RESULT_OK, mReplyIntent);
         finish();
     }
-
-
 
 }

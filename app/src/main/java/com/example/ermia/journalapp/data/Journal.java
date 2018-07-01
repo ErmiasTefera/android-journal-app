@@ -9,7 +9,10 @@ import android.support.annotation.NonNull;
 public class Journal {
 
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    public long id;
+
+    @NonNull
+    public String uuid;
 
     @NonNull
     @ColumnInfo(name = "title")
@@ -22,35 +25,43 @@ public class Journal {
     @ColumnInfo(name = "date")
     private String date;
 
+    public long getId() {
+        return id;
+    }
 
-    public int getId() {
-        return this.id;
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @NonNull
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(@NonNull String uuid) {
+        this.uuid = uuid;
     }
 
     @NonNull
     public String getTitle() {
-        return this.title;
-    }
-
-    public String getContent() {
-        return this.content;
-    }
-
-    @NonNull
-    public String getDate() {
-        return this.date;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        return title;
     }
 
     public void setTitle(@NonNull String title) {
         this.title = title;
     }
 
+    public String getContent() {
+        return content;
+    }
+
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @NonNull
+    public String getDate() {
+        return date;
     }
 
     public void setDate(@NonNull String date) {
